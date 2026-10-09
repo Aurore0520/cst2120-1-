@@ -1,0 +1,87 @@
+/*Sets the style for the whole webpage*/
+body {
+    font-family:Arial, sans-serif;
+    margin:0;
+    padding: 20px;
+    background-color: #0d0d0d;
+    color: white;
+}
+
+/*Main container for the page*/
+.container {
+    width: 80%;
+    margin: auto;
+}
+
+/*Top section, centers the logo and introduction section*/
+.top-section {
+    text-align: center;
+}
+
+/*Logo*/
+.top-section img{
+    width: 450px;
+}
+
+/*Styles the title*/
+.text h1 {
+    color: white;
+    margin-bottom: 5px;
+}
+
+/*Styles the description text*/
+.text p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #dddddd;
+}
+
+/*Styling the login button*/
+.login-button {
+    float: right;
+    padding:10px 25px;
+    background-color: transparent;
+    color:white;
+    border: 1px solid white;
+    cursor: pointer;
+}
+
+/*Creates space around the game buttons*/
+.game-buttons {
+    margin-top: 30px;
+}
+
+.start-button,.how-to-play-button { 
+    display: block;
+    margin: 15px auto;
+    padding: 12px 30px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.start-button {
+    background-color: #8b0000;
+    color:white;
+    border: none;
+}
+
+.how-to-play-button {
+    background-color: transparent;
+    color: white;
+    border: 1px solid white;
+}
+
+/*Style the return button*/
+#homeButton {
+    padding: 10px 20px;
+    background-color: #1e0101;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/*Change the button appearance when hovering*/
+#homeButton:hover {
+    background-color:#4a1515;
+}
