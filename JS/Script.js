@@ -33,6 +33,40 @@ if (homeButton) {
     homeButton.addEventListener("click", function() {
     //Redirect the player to the homepage
     window.location.href = "Index.html";
-})
+})}
 
-}
+//Animate background movement
+let posY = 0;
+setInterval(() => {
+    posY += 0.2 //Speed of movement 
+    document.body.style.backgroundPosition=`center ${posY}px`;
+}, 100);
+
+//Play game theme music
+const ambience = new Audio("Pictures, GIF, and sound/thememusic.wav");
+ambience.loop = true; //music will play continuously
+ambience.volume = 0.5; //softer volume 
+ambience.play();   
+
+//Prevent autoplay restrictions
+document.addEventListener("click", () => {
+    ambience.play();
+}, {once: true});
+
+//Adding button to turn music on or off
+const soundToggle = document.getElementById("soundToggle");
+let isPlaying = true;
+
+soundToggle.addEventListener("click", () => {
+    if (isPlaying) {
+        ambience.pause();
+    }
+    else {
+        ambience.play();
+    }
+    isPlaying = !isPlaying;
+});
+
+
+
+

@@ -1,0 +1,113 @@
+/*Sets the style for the whole webpage*/
+body {
+    /*Sets the style for the whole page*/
+    font-family:Arial, sans-serif;
+    margin:0;
+    padding: 20px;
+    /*Adds the haunted house background image*/
+    background-image: url(Pictures,\ GIF\,\ and\ sound/background.png);
+    color: white;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    top: 0; left:0;
+    width:100%; height:100%;
+    background:rgba(0,0,0,0.6); /*dark overlay*/
+    z-index:-1;
+}
+
+/*Main container for the page*/
+.container {
+    max-width: 800px;
+    margin: 60px auto;
+    padding: 30px;
+    background:rgba(15,15,15,0.85); /*Solid background color*/
+    border:1px solid #b22222;
+    box-shadow: 0 0 20px rgba(178,34,34,0.6);
+    border-radius: 10px;
+}
+
+/*Styles each login/ registration card*/
+.auth-card {
+    background-color: #0d0d0d;
+    border: 1px solid #8b2525;
+    border-radius: 12px;
+    padding: 40px; /*more inner space*/
+    margin-bottom: 40px; /*more space between cards*/
+    box-shadow: 0 5px 20px rgba(0,0,0,0.6);
+}
+
+/*Styles the input boxes*/
+input {                       
+    width: 100%;
+    padding:14px;
+    margin-bottom: 15px;
+    background-color: #1c1717;
+    color:white;
+    border:1px solid #665555;
+    border-radius: 6px;
+}
+
+/*Styles the buttons*/
+button{
+    margin-top: 15px;
+    background-color: #9e1b1b;
+    color:white;
+    border:none;
+    border-radius: 6px;
+    padding: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+
+}
+
+/*changes the button color on hover*/
+button:hover{
+    background-color: #c62828;
+    box-shadow: 0 0 10px #c62828;
+
+}
+
+
+/*Styles the heading*/
+h3, h1, h2 {
+    font-family: 'Creepster', cursive;
+    color: #b22222;
+    letter-spacing: 2px;
+
+}
+
+/*Paragraphs*/
+p {
+    color: #ddd;
+    line-height: 1.8;
+}
+
+/*Messages*/
+#registerMessage {color: #4caf50; margin-top: 10px;} /*Success green*/
+#loginMessage {color: #f44336; margin-top: 10px;} /*error red*/
+
+
+/*Styles the Bact to Homepage links*/
+a{
+    color:#ff7777;
+}
+
+/*Style the return button*/
+#homeButton {
+    padding: 12px 25px;
+    background: #111;
+    color: #ff4444; 
+    border: 2px solid #ff4444;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+/*Change the button appearance when hovering*/
+#homeButton:hover {
+    background-color:#ff4444;
+    color: #fff;
+    box-shadow: 0 0 15px #ff4444;
+}
