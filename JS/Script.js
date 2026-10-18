@@ -35,12 +35,6 @@ if (homeButton) {
     window.location.href = "Index.html";
 })}
 
-//Animate background movement
-let posY = 0;
-setInterval(() => {
-    posY += 0.2 //Speed of movement 
-    document.body.style.backgroundPosition=`center ${posY}px`;
-}, 100);
 
 //Play game theme music
 const ambience = new Audio("Pictures, GIF, and sound/thememusic.wav");
@@ -60,9 +54,11 @@ let isPlaying = true;
 soundToggle.addEventListener("click", () => {
     if (isPlaying) {
         ambience.pause();
+        soundToggle.textContent= "Music: OFF";
     }
     else {
         ambience.play();
+        soundToggle.textContent = "Music:ON";
     }
     isPlaying = !isPlaying;
 });

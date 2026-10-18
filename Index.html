@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
 
         <!--Links the external CSS file for styling-->
-        <link rel="stylesheet" href="style.css"> 
+        <link rel="stylesheet" href="CSS/style.css"> 
 
 
         <title>The Silent House</title>
@@ -12,40 +12,31 @@
     <body>
 
       <div class="container"> <!--Main container for the whole page-->
-        <!-- Button that redirects to the login page -->
-        <a href="LoginOrRegister page.html"> 
-        <button class="login-button">LOGIN</button> <!--Login button at the top right of the page-->
-        </a>
+        <div class="top-buttons">
+            <a href="LoginOrRegister page.html" class="login-button">LOGIN</a>
+            <a href="ranking.html" class="rank-button">RANK</a>
+        </div>
 
         <!--Adding a button so that the player can mute the music-->
-        <button id="soundToggle"> Music on or off</button>
+        <button id="soundToggle" aria-label="Toggle background music"> Music on or off</button>
         
+
 
        <div class="top-section"> <!--Top-section containing image and intro text-->
          <img src="Pictures, GIF, and sound/Logo.png" alt="The Silent House"> <!--Displays the Game logo-->
+        
 
         <div class="text"> <!--Container for title and description-->
            <h1>The Silent House</h1>
            <hr> <!--Horizontal line seperator-->
+        </div>
 
-
-        <div class="game buttons"> <!--game navigation buttons-->
-            <!--button to start the game-->
-            <button class="start-button" id="startButton">
-                START GAME
-            </button> 
-
-            <!--button for the instructions-->
-            <button class="how-to-play-button" id="howToPlayButton">
-                HOW TO PLAY
-            </button>
-
-            <!--Displays the welcome message-->
+        <div class="game-buttons"> <!--game navigation buttons-->
+            <button class="start-button" id="startButton">Start Game</button>
+            <button class="how-to-play-button" id="howToPlayButton">How to play</button>
             <p id="message"></p>
         </div>
-        </div>
-       </div>
-       
+            
       </div>
        <script src="JS/Script.js"></script>
     </body>

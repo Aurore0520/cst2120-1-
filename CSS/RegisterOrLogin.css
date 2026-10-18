@@ -5,7 +5,7 @@ body {
     margin:0;
     padding: 20px;
     /*Adds the haunted house background image*/
-    background-image: url(Pictures,\ GIF\,\ and\ sound/background.png);
+    background-image: url(../Pictures,\ GIF\,\ and\ sound/background.png);
     color: white;
 }
 

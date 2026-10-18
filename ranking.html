@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+
+        <!--Makes the page responsive on different screens-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!--Links the external CSS file for styling-->
+        <link rel="stylesheet" href="CSS/ranking.css"> 
+
+        <title>Leaderboard- The Silent House</title>
+    </head>
+    <body>
+        <!--Main leaderboard for the whole page-->
+        <div class="container">
+
+            <h2>Leaderboard</h2>
+
+            <!--Displays the current player's score-->
+            <p id="currentScore">Your score: 0</p>
+
+            <!--Table showing player rankings-->
+            <table>
+
+                <!--table headings-->
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Player</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+
+                <!--JS inserts the ranking rows here-->
+                <tbody id="rankingTable"></tbody>
+            </table>
+
+            <!--Button to return to homepage-->
+            <a href="Index.html" id="homeButton">Back to Home</a>
+        </div>
+
+        <!--Links the external JavaScript file-->
+        <script src="JS/ranking.js"></script> 
+
+    </body>
+</html>

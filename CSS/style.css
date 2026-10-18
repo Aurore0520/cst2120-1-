@@ -5,30 +5,33 @@ body {
     margin:0;
     padding: 40px;
     /*Adds the haunted house background image*/
-    background-image: url(Pictures,\ GIF\,\ and\ sound/background.png);
+    background-image: 
+    linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+    url(../Pictures\,\ GIF\,\ and\ sound/background.png); 
     background-color: #0d0d0d;
+    background-size: 100% auto;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment:fixed;
+
     color: white;
-    position: relative;
+    position:relative;
+
 }
 
-body::before{
-    content:"";
-    position:fixed;
-    top: 0; left:0;
-    width:100%; height:100%;
-    background:rgba(0,0,0,0.6); /*dark overlay*/
-    z-index:-1;
-}
 
 /*Main container for the page*/
 .container {
     max-width: 800px;
     margin: 60px auto;
-    padding: 30px;
-    background:rgba(15,15,15,0.85); /*Solid background color*/
-    border:1px solid #b22222;
-    box-shadow: 0 0 20px rgba(178,34,34,0.6);
-    border-radius: 10px;
+    padding: 40px;
+    /*Gradient overlay*/
+    background: linear-gradient(rgba(15,15,15,0.9), 
+    rgba(50, 0, 0 ,0.8)
+    );
+    border:2px solid #b22222;
+    box-shadow: 0 0 25px #b22222;
+    border-radius: 12px;
 }
 
 /*Arranges form fields vertically*/
@@ -48,7 +51,7 @@ form {
 .top-section img{
     width: 250px;
     opacity: 0.8;
-    transition:transform 0.3 ease;
+    transition:transform 0.3s ease;
 }
 
 .top-section img:hover {
@@ -57,6 +60,7 @@ form {
 
 /*Styles the title*/
 .text h1 {
+    font-family: 'Creepster', cursive;
     color: white;
     margin-top: 20px;
     text-shadow: 0 0 10px #ff4444; /*eerie glow*/
@@ -64,34 +68,46 @@ form {
 }
 
 @keyframes flicker {
-    from {opacity:1;}
-    to {opacity: 0.8;}
+    from {
+        opacity:1;
+    }
+    to {
+        opacity: 0.8;
+    }
     
 }
 
-.text h2 {
-    color: white;
-    margin-top: 5px;
-}
+h3, h1, h2 {
+    font-family: 'Creepster', cursive;
+    color: #b22222;
+    letter-spacing: 2px;
 
+}
 /*Styles the description text*/
 .text p {
     font-size: 16px;
-    line-height: 1.6;
-    color: #dddddd;
+    line-height: 1.8;
+    color: #cccccc;
 }
 
-/*Styling the login button*/
-.login-button {
-    float: right;
+/*Container for login and rank buttons*/
+.top-buttons {
+    display: flex;
+    justify-content: flex-end; /*push them to the right*/
+    gap: 10px; /*space between buttons*/
+}
+
+/*Styling both top buttons consistently*/
+.login-button, .rank-button {
     padding:10px 25px;
     background-color: transparent;
     color:white;
     border: 1px solid white;
     cursor: pointer;
     transition:0.3s;
+    text-decoration: none;
 }
-.login-button:hover {
+.login-button:hover, .rank-button:hover {
     background-color: #8b0000;
     box-shadow: 0 0 10px #8b0000;
 }
@@ -102,7 +118,8 @@ form {
 }
 
 .start-button,.how-to-play-button { 
-    transition: 0.3s;
+    display: block;
+    transition: all 0.3s ease;
     margin: 25px auto;
     padding: 14px 35px;
     font-size: 18px;
@@ -123,6 +140,25 @@ form {
 
 .start-button:hover, .how-to-play-button:hover{
     transform: scale(1.1);
+    box-shadow: 0 0 15px #ff4444;
+}
+#soundToggle {
+    position: absilute; /*keeps the button fixed in a spot*/
+    top: 20px;
+    left: 20px; /*move it to top-left corner*/
+    padding: 10px 20px;
+    background: transparent;
+    color: #ff4444; /*eerie red text*/
+    border: 2px solid #ff4444;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-family: 'Creepster', cursive;
+}
+
+#soundToggle:hover {
+    background-color: #ff4444;
+    color: #fff;
     box-shadow: 0 0 15px #ff4444;
 }
 
