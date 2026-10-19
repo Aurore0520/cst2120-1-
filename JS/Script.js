@@ -32,7 +32,7 @@ const homeButton = document.getElementById("homeButton");
 if (homeButton) {
     homeButton.addEventListener("click", function() {
     //Redirect the player to the homepage
-    window.location.href = "Index.html";
+    window.location.href = "index.html";
 })}
 
 
