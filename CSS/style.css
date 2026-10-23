@@ -7,7 +7,7 @@ body {
     /*Adds the haunted house background image*/
     background-image: 
     linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-    url(../Pictures\,\ GIF\,\ and\ sound/background.png); 
+    url(../assets/background.png); 
     background-color: #0d0d0d;
     background-size: 100% auto;
     background-position: center;

@@ -1,8 +1,11 @@
 //function to start game
 function startGame() {
-    document.getElementById("message").innerHTML =
-    "Welcome to The Silent House, your adventure shall begin soon!";
+    
+    window.location.href = "GAME/game.html";
 } 
+
+//calls the function when start button is clicked
+document.getElementById("startButton").onclick = startGame;
 
 //Finds the start game button
 const startButton = document.getElementById("startButton");
@@ -37,7 +40,7 @@ if (homeButton) {
 
 
 //Play game theme music
-const ambience = new Audio("Pictures, GIF, and sound/thememusic.wav");
+const ambience = new Audio("assets/thememusic.wav");
 ambience.loop = true; //music will play continuously
 ambience.volume = 0.5; //softer volume 
 ambience.play();   

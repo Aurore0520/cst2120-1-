@@ -1,0 +1,16 @@
+/*Styles the whole webpage*/
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #100909;
+    font-family: Arial, sans-serif;
+}
+
+/*Creates the Phaser game on the webpage*/
+#game-contiainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
