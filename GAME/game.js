@@ -1,3 +1,4 @@
+console.log("My js is working");
 //Creates the first scene of the silent house
 class SilentHouse extends Phaser.Scene
 {
@@ -5,6 +6,133 @@ class SilentHouse extends Phaser.Scene
     {
         super("SilentHouse");
     }
+
+    enableCupSelection() {
+
+        //Stores all three cups
+        const cups = [this.cup1, this.cup2, this.cup3];
+
+        //Makes each cup clickable
+        cups.forEach((cup) => {
+
+            //Removes the previous click listener
+            cup.removeAllListeners("pointerdown");
+
+            //Enables mouse interaction
+            cup.setInteractive({useHandCursor: true});
+
+
+            //Detects when the player clicks the cup
+            cup.on("pointerdown", () => {
+                
+               //Prevents the player from selecting another cup
+                cups.forEach((othercup)=> {
+                    othercup.disableInteractive();
+                });
+
+                //Moves the selected cup upwards
+                this.tweens.add({
+                    targets: cup,
+                    y: 290,
+                    duration: 500,
+                    ease: "Power2",
+
+                    //Reveals the apple fter the cup moves
+                    onComplete: () => {
+
+                       //Reveals the selected apple
+                        cup.apple.setVisible(true);
+
+                        //Check the selected apple
+                        this.checkApple(cup);
+                    }
+                });
+
+            });
+        });
+    }
+
+    //checking whether the selected apple is good or not
+    checkApple(cup) {
+
+        //Increases the attempt counter
+        this.attempts++;
+
+        //Checks whether the player selected the rotten apple
+        if (cup.apple.texture.key == "rottenApple") {
+
+            //Calculate how many lives are remaining
+            const remaininglives = 2 - this.attempts;
+
+            //Updates the lives displayes on the screen
+            this.livestext.setText("❤️".repeat(remaininglives) + "Lives: " + remaininglives);
+
+            //Changes the message color to red
+            this.messageText.setColor("#ff3333");
+
+            //checking if the player has another chance
+            if(this.attempts < 2) {
+
+                this.messageText.setText("Rotten apple! One chance remaining.");
+
+                //Gives the player another attempt
+                this.retryAttempt(cup);
+
+            } else{
+
+                this.messageText.setText("Game over! Restart level 1.");
+
+                //Waits 3 secs before restarting the level
+                this.time.delayedCall(3000, () => {
+
+                    //Restarts level 1
+                    this.scene.restart();
+                });
+            }
+        } else {
+
+            //Awards point for choosing good apple
+            this.score = 100;
+
+            //Updates the score displayes on the screen
+            this.scoreText.setText("Score: " + this.score);
+
+            //Vhanges the message color to green
+            this.messageText.setColor("#00ff66");
+
+            this.messageText.setText("Good apple! You earned 100 points");
+        }
+    }
+
+    //Allowing a second chance to the player after selecting the rotten apple
+    retryAttempt(cup) {
+
+        //Waits 2 secs before restarting the shuffle
+        this.time.delayedCall(2000, () => {
+
+            //Hides the message 
+            this.messageText.setText("");
+
+            //Moves the selected cup back over its apple
+            this.tweens.add({
+                targets: cup,
+                y: 370,
+                duration: 500,
+                ease: "Power2",
+
+                //Runs when the cup finishes moving
+                onComplete: () => {
+
+                    //Hides the revealed apple
+                    cup.apple.setVisible(false);
+
+                    //Shuffles the cups again
+                    this.startShuffling();
+                }
+            });
+        });
+    }
+
 
     //Loads the image before the scene starts
     preload() {
@@ -27,6 +155,47 @@ class SilentHouse extends Phaser.Scene
     //Runs when the scene starts
     create ()
     {
+
+        //keeping track of the player's attempt
+        this.attempts = 0;
+
+        //stores the player's score
+        this.score = 0;
+
+        //Displays the player's remaining lives
+        this.livestext = this.add.text(30 , 20, "Lives: ❤️❤️", {
+            fontSize: "22px",
+            fontFamily: "Arial",
+            color: "#ffffff"
+        });
+
+        //Displays the score
+        this.scoreText = this.add.text(600, 20, "Score: 0", {
+            fontSize: "22px",
+            fontFamily: "Arial",
+            color: "#ffffff"
+        });
+
+        //keeps the lives and score in the background
+        this.livestext.setDepth(10);
+        this.scoreText.setDepth(10);
+
+        //Creates a messagefor the player
+        this.messageText = this.add.text(400, 100, "", {
+            fontSize: "24px",
+            color: "#ffffff",
+            fontFamily: "Arial",
+            backgroundColor: "#000000",
+            padding: {x:15, y:10},
+            align: "center"
+        });
+
+        //Centers the message horizontally
+        this.messageText.setOrigin(0.5);
+
+        //Keeps the message above the game objects
+        this.messageText.setDepth(10);
+
         //Sets the background color of the game
         this.cameras.main.setBackgroundColor("#180b0b");
 
@@ -132,6 +301,10 @@ class SilentHouse extends Phaser.Scene
 
             //Stops after three shuffles
             if (shuffleCount >= 3) {
+
+                //Allows the player to choose a cup
+                this.enableCupSelection();
+
                 return;
             }
 
@@ -165,6 +338,7 @@ class SilentHouse extends Phaser.Scene
     }
 
 }
+
  //Configuration of the Phaser game
  const config = {
     type: Phaser.AUTO,
