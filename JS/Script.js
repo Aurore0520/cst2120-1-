@@ -41,30 +41,54 @@ if (homeButton) {
 
 //Play game theme music
 const ambience = new Audio("assets/thememusic.wav");
+
 ambience.loop = true; //music will play continuously
+
 ambience.volume = 0.5; //softer volume 
-ambience.play();   
 
-//Prevent autoplay restrictions
-document.addEventListener("click", () => {
-    ambience.play();
-}, {once: true});
+//Tracks whether the player has muted the music
+let isMuted = false;
 
-//Adding button to turn music on or off
+//find the music toggle button
 const soundToggle = document.getElementById("soundToggle");
-let isPlaying = true;
 
+//updates the button text
+function updateSoundButton() {
+    soundToggle.textContent = isMuted ? "Music: OFF" : "Music: ON";
+
+}
+
+//Starts the music after the player's first interaction
+function startMusic() {
+
+    //Does not start music if the player has muted it
+    if (!isMuted && ambience.paused) {
+        ambience.play().catch(() => {
+
+        });
+    }
+}
+//Starts the music when the player clicks anywhere
+document.addEventListener("click", startMusic);
+
+//Allows the player to mute/unmute the music
 soundToggle.addEventListener("click", () => {
-    if (isPlaying) {
+
+    //Changes the mute setting
+    isMuted = !isMuted;
+
+    if (isMuted) {
         ambience.pause();
-        soundToggle.textContent= "Music: OFF";
+    } else {
+        startMusic();
     }
-    else {
-        ambience.play();
-        soundToggle.textContent = "Music:ON";
-    }
-    isPlaying = !isPlaying;
+
+    //Updates the button text
+    updateSoundButton();
 });
+
+//Displays the initial button text
+updateSoundButton();
 
 
 

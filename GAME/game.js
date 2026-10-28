@@ -1,4 +1,3 @@
-console.log("My js is working");
 //Creates the first scene of the silent house
 class SilentHouse extends Phaser.Scene
 {
@@ -61,6 +60,11 @@ class SilentHouse extends Phaser.Scene
         //Checks whether the player selected the rotten apple
         if (cup.apple.texture.key == "rottenApple") {
 
+            //Plays the error sound
+            this.sound.play("wrongAnswer", {
+                volume:0.7
+            });
+
             //Calculate how many lives are remaining
             const remaininglives = 2 - this.attempts;
 
@@ -80,6 +84,14 @@ class SilentHouse extends Phaser.Scene
 
             } else{
 
+                //Stops the background music
+                this.horrorMusic.stop();
+
+               //Plays the game over sound
+               this.sound.play("gameOver", {
+                  volume: 0.8
+                });
+
                 this.messageText.setText("Game over! Restart level 1.");
 
                 //Waits 3 secs before restarting the level
@@ -92,15 +104,30 @@ class SilentHouse extends Phaser.Scene
         } else {
 
             //Awards point for choosing good apple
-            this.score = 100;
+            this.score += 100;
 
+            
             //Updates the score displayes on the screen
             this.scoreText.setText("Score: " + this.score);
 
-            //Vhanges the message color to green
+            //Stops the horror music
+            this.horrorMusic.stop();
+
+            //Plays the victory sound
+            this.sound.play("victory", {
+                volume: 0.7
+            });
+
+            //Changes the message color to green
             this.messageText.setColor("#00ff66");
 
             this.messageText.setText("Good apple! You earned 100 points");
+
+            //Waits 2 secs before displaying the victory screen
+            this.time.delayedCall(2000, () => {
+                //Displays the victory screen
+                this.showVictoryScreen();
+            });
         }
     }
 
@@ -133,8 +160,61 @@ class SilentHouse extends Phaser.Scene
         });
     }
 
+    //Displays the victory screen after completing level 1
+    showVictoryScreen() {
 
-    //Loads the image before the scene starts
+        //Hides the previous winning message
+        this.messageText.setVisible(false);
+
+        //creates a dark background over the game
+        const victoryBackground = this.add.rectangle(
+            400, 300, 650, 380, 0x000000, 0.9
+        ).setDepth(20);
+
+        //Displays the victory message 
+        const victoryText = this.add.text(
+            400, 250,
+            "LEVEL 1 COMPLETED!\n\n" +
+            "Congratulations! You survived the Apple Challenge.\n\n" +
+            "Score: " +this.score + " points",
+
+            {
+                fontSize: "22px",
+                fontFamily: "Arial",
+                color: "#ffffff",
+                align: "center",
+                lineSpacing: 10,
+                wordWrap: {width:580}
+            }
+        ).setOrigin(0.5).setDepth(21);
+
+        //Creates the Continue button
+        const continueButton = this.add.text(
+            400, 420, "CONTINUE TO LEVEL 2",
+            {
+                fontSize: "24px",
+                fontFamily: "Arial",
+                Color: "#ffffff",
+                backgroundColor: "#225533",
+                padding: {x:20, y:12}
+            }
+        )
+        .setOrigin(0.5)
+        .setDepth(21)
+        .setInteractive({useHandCursor: true});
+
+        //Runs when the player clicks Continue
+        continueButton.on("pointerdown", () => {
+
+            //Starts level 2 & transfers the score
+            this.scene.start("level2", {
+                score: this.score
+            });
+        });
+    }
+
+
+    //Loads images and sounds before the scene starts
     preload() {
     //loads the background image for level 1
     this.load.image("level1Background", "../assets/level1.png");
@@ -150,6 +230,21 @@ class SilentHouse extends Phaser.Scene
     this.load.image("cup1", "../assets/cup.png");
     this.load.image("cup2", "../assets/cup.png");
     this.load.image("cup3", "../assets/cup.png");
+
+    //Loads the background music
+    this.load.audio("horrorMusic", "../assets/horrortheme1.wav");
+
+    //Loads the button click sound
+    this.load.audio("menuSelect", "../assets/Menu_Select_00.mp3");
+
+    //Loads the wrong answer sound
+    this.load.audio("wrongAnswer", "../assets/caught.wav");
+
+    //Loads the game over sound
+    this.load.audio("gameOver", "../assets/GameOver.ogg");
+
+    //Loads victory sound
+    this.load.audio("victory", "../assets/winning.mp3");
     }
 
     //Runs when the scene starts
@@ -161,6 +256,17 @@ class SilentHouse extends Phaser.Scene
 
         //stores the player's score
         this.score = 0;
+
+        //Creates the background music and makes it repeat
+        this.horrorMusic = this.sound.add("horrorMusic", {
+            loop: true,
+            volume: 0.3
+        });
+
+        //Creates the button click
+        this.menuSelect = this.sound.add("menuSelect", {
+            volume: 0.6
+        });
 
         //Displays the player's remaining lives
         this.livestext = this.add.text(30 , 20, "Lives: ❤️❤️", {
@@ -233,8 +339,91 @@ class SilentHouse extends Phaser.Scene
         this.cup1.apple = this.apple1;
         this.cup2.apple = this.apple2;
         this.cup3.apple = this.apple3;
+         
+        //Hides the apples before the level starts
+        this.apple1.setVisible(false);
+        this.apple2.setVisible(false);
+        this.apple3.setVisible(false);
 
-        //waits 3 seconds before covering the apples
+        //Hides the apples before the level starts
+        this.cup1.setVisible(false);
+        this.cup2.setVisible(false);
+        this.cup3.setVisible(false);
+
+        //Creates a dark background for the instructions
+        const instructionBackground = this.add.rectangle(
+            400, 300, 650, 380, 0x000000, 0.9
+        ).setDepth(20);
+
+        //Displays the instructions for level 1
+        const instructions = this.add.text(
+            400, 240,
+            "LEVEL 1 - THE APPLE CHALLENGE\n\n" +
+            "There are 3 apples: 2 good and 1 rotten.\n" +
+            "Watch them carefully!\n" +
+            "The cups will cover the apples and begin shuffling.\n" +
+            "You have 2 chances to find a good apple.\n" +
+            "If you find the good one, you advance to level 2.\n" +
+            "If you fail both attempts, you must restart the level 1.\n\n" +
+            "GOODLUCK!",
+
+            {
+                fontSize: "19px",
+                fontFamily: "Arial",
+                color: "#ffffff",
+                align: "center",
+                lineSpacing: 8
+            }
+        ).setOrigin(0.5).setDepth(21);
+
+        //Creates the Start level button
+        const startButton = this.add.text(
+            400, 420, "START LEVEL",
+            {
+                fontSize: "28px",
+                fontFamily: "Arial",
+                color: "#00ff66",
+                backgroundColor: "#222222",
+                padding: {x: 20, y: 12}
+            }
+        )
+        .setOrigin(0.5)
+        .setDepth(21)
+        .setInteractive({useHandCursor: true});
+
+        //Runs when the player clicks start level
+        startButton.on("pointerdown", () => {
+
+            //Plays the button click sound
+            this.menuSelect.play();
+
+            //Starts the background music
+            this.horrorMusic.play();
+
+            //Removes the instruction screen
+            instructionBackground.destroy();
+            instructions.destroy();
+            startButton.destroy();
+
+            //Shows the apples
+            this.apple1.setVisible(true);
+            this.apple2.setVisible(true);
+            this.apple3.setVisible(true);
+
+            //Shows the cups
+            this.cup1.setVisible(true);
+            this.cup2.setVisible(true);
+            this.cup3.setVisible(true);
+
+            //Starts the level
+            this.startLevel1();
+        });
+
+    }
+
+    //Starts the level 1 challenge
+    startLevel1() {
+         //waits 3 seconds before covering the apples
         this.time.delayedCall(3000, () => {
 
             //Moves all three cups down over the apples
@@ -257,7 +446,6 @@ class SilentHouse extends Phaser.Scene
             });
 
         });
-
     }
 
 
@@ -352,7 +540,7 @@ class SilentHouse extends Phaser.Scene
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
 
-    scene: [SilentHouse]
+    scene: [SilentHouse, level2]
  };
 
  // Creates and starts the phaser game
