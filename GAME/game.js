@@ -45,7 +45,7 @@ class SilentHouse extends Phaser.Scene
                         //Check the selected apple
                         this.checkApple(cup);
                     }
-                });
+                }); 
 
             });
         });
@@ -540,7 +540,7 @@ class SilentHouse extends Phaser.Scene
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
 
-    scene: [SilentHouse, level2]
+    scene: [SilentHouse, level2, level3, level4]
  };
 
  // Creates and starts the phaser game
