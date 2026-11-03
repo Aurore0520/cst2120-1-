@@ -75,8 +75,17 @@ function loginUser(event) {
         //Saves login status in the browser
         localStorage.setItem("silentHouseLoggedIN", "true");
 
+        //Stores the username of the logged-in player
+        sessionStorage.setItem("currentPlayer", username);
+
+
         //Clears the login form
         loginForm.reset();
+
+        //wait before starting the game
+        setTimeout(() => {
+            window.location.href = "GAME/game.html";
+        }, 1000);
     }
 
     //Displays an error message if the details are incorrect

@@ -250,6 +250,21 @@ class SilentHouse extends Phaser.Scene
     //Runs when the scene starts
     create ()
     {
+        const currentPlayer = sessionStorage.getItem("currentPlayer");
+
+        //Displays the username if the player is logged in
+        if (currentPlayer) {
+            this.add.text(
+                20, 65,
+                "Player: " + currentPlayer,
+                {
+                    fontSize: "20px",
+                    color: "#ffffff", 
+                    backgroundColor: "#000000",
+                    padding: {x: 10, y: 5}
+                }
+            ).setDepth(30);
+        }
 
         //keeping track of the player's attempt
         this.attempts = 0;

@@ -387,7 +387,7 @@ class level2 extends Phaser.Scene
             this.questionText.setColor("#00ff66");
 
             //play soft sound
-            this.sound.play("correct", {volume:0.2});
+            this.sound.play("correct", {volume:0.5});
 
 
         } else {
@@ -399,7 +399,7 @@ class level2 extends Phaser.Scene
             this.questionText.setColor("#ff3333");
 
             //plays incorrect sound
-            this.sound.play("wrong", {volume: 0.3});
+            this.sound.play("wrong", {volume: 0.8});
 
             //Deducts 30 points
             this.levelPoints -= 30;

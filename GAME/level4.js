@@ -403,6 +403,50 @@ class level4 extends Phaser.Scene {
                 align: "center"
             }
         ).setOrigin(0.5);
+
+        //Gets the username of the logged-in player
+        const username = sessionStorage.getItem("currentPlayer") || "Guest";
+
+        //Saves the final score
+        localStorage.setItem("silentHouseCurrentScore", this.score);
+
+        //Gets the existing leaderboard
+        let leaderboard = JSON.parse(
+            localStorage.getItem("silentHouseLeaderboard")
+        ) || [];
+
+        //Adds the player's result
+        leaderboard.push({
+            name: username,
+            score: this.score
+        });
+
+        //Saves the updated leaderboard 
+        localStorage.setItem(
+            "silentHouseLeaderboard",
+            JSON.stringify(leaderboard)
+        );
+
+        //Creates a return to homepage button
+        const  homeButton = this.add.text(
+
+            400, 480, 
+            "RETURN TO HOMEPAGE",
+            {
+               fontSize: "24px",
+               color:"#ffffff",
+               backgroundColor: "#425c5b",
+               padding: {x: 20, y: 12}
+            }
+        )
+        .setOrigin(0.5)
+        .setDepth(100)
+        .setInteractive({useHandCursor: true});
+
+        //Redirects the player to the homepage
+        homeButton.on("pointerdown", () => {
+            window.location.href = "../index.html";
+        });
     }
 
     //Player loses the battle
