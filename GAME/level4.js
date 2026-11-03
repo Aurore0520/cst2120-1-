@@ -36,23 +36,6 @@ class level4 extends Phaser.Scene {
         this.load.audio("playerHit", "../assets/playerHit.ogg");
         this.load.audio("monsterHit", "../assets/monsterHit.flac");
 
-        //Loads the monster attack animation
-        this.load.spritesheet(
-            "monsterAttack", "../assets/monster_frames.png",
-            {frameWidth: 122, frameHeight: 105}
-        );
-
-        //Loads the monster hurt animation
-        this.load.spritesheet(
-            "monsterHurt", "../assets/monster_hurt_frames.png",
-            {frameWidth: 122, frameHeight: 105}
-        );
-
-        //Loads the monster defeat animation
-        this.load.spritesheet(
-            "monsterDefeat", "../assets/monster_defeat_frames.png",
-            {frameWidth: 122, frameHeight: 105}
-        );
 
     }
 
@@ -79,39 +62,6 @@ class level4 extends Phaser.Scene {
         this.monster = this.add.sprite(
             400, 300, "Monster"
         ).setDisplaySize(240, 260);
-
-        //Monster attack
-        this.anims.create({
-            key: "monsterAttackAnim",
-            frames: this.anims.generateFrameNumbers("monsterAttack", {
-                start: 0,
-                end: 3
-            }),
-            frameRate: 8,
-            repeat: 0
-        });
-
-        //Monster hurt animation
-        this.anims.create({
-            key: "monsterHurtAnim",
-            frames: this.anims.generateFrameNumbers("monsterHurt", {
-                start: 0,
-                end: 3
-            }),
-            frameRate: 8,
-            repeat: 0
-        });
-
-        //Monster defeat animation
-        this.anims.create({
-            key: "monsterDefeatAnim",
-            frames: this.anims.generateFrameNumbers("monsterDefeat", {
-                start: 0,
-                end: 3
-            }),
-            frameRate: 5,
-            repeat: 0
-        });
 
 
         //Monster health label
@@ -275,103 +225,89 @@ class level4 extends Phaser.Scene {
         //Sword is selected by default
         this.swordButton.setBackgroundColor("#008844");
 
-        //Monster attacks every 4 secs
-        this.monsterTimer = this.time.addEvent({
-            delay: 4000,
-            callback: this.monsterAttack,
-            callbackScope: this,
-            loop: true
-        }); 
     }
 
     //Player attacks the monster
     attackMonster() {
 
-        //Prevents attacks when the battle ends/ an attack is in progress
-        if (this.battleFinished || !this.battleStarted || this.isAttacking){
+        //Prevents attacking during another turn
+        if (this.battleFinished || !this.battleStarted || this.isAttacking) {
             return;
         }
-         this.isAttacking = true;   
-        
-        //Different damage depending on weapon
+
+        this.isAttacking = true;
+
+        //Damage depends on the selected weapon
         const damage = this.weapon === "axe" ? 30 : 20;
 
-        this.monsterHealth = Math.max(
-            0, 
-            this.monsterHealth - damage
+        //Reduces monster health
+        this.monsterHealth = Math.max(0, this.monsterHealth - damage);
+
+        //Updates monster health display
+        this.monsterHealthText.setText(
+            "MONSTER HP: " + this.monsterHealth + "/150"
         );
 
-        //Plays the hit sound
-        this.sound.play("playerHit", {volume: 0.35});
+        //Plays player attack sound and monster hurt animation
+        this.sound.play("playerHit", { volume: 0.35 });
 
-        //Plays the monster hurt animation
-        this.monster.play("monsterHurtAnim");
+        this.monster.setTexture("Monster");
+        this.monster.setVisible(true);
+        this.monster.setAlpha(1);
+        this.monster.setDisplaySize(240, 260);
 
-        //Returns to the normal monster image afterwards
-        this.monster.once("animationcomplete-monsterHurtAnim", () => {
+        this.monster.setTint(0xff3333);
 
-            if (!this.battleFinished) {
-                this.monster.setTexture("Monster");
+        this.time.delayedCall(300, () => {
+            this.monster.clearTint();
+
+            //If the monster is defeated, end the battle
+            if (this.monsterHealth <= 0) {
+                this.winBattle();
+                return;
             }
 
-            //Allows the player to attack again
-            this.isAttacking = false;
+            //Otherwise the monster takes its turn
+            this.monsterAttack();
         });
-
-        //Updates monster health
-        this.monsterHealthText.setText(
-            "MONSTER HP: " + this.monsterHealth +"/150"
-        );
-
-        //Checks if the monster is defeated
-        if (this.monsterHealth <= 0) {
-            this.winBattle();
-        }
     }
 
-    //Monster attacks the player
+    //Monster attacks after the player's turn
     monsterAttack() {
 
         if (this.battleFinished || !this.battleStarted) {
+
             return;
         }
 
-        console.log("MONSTER ATTACKING!");
+        //Damage is applied immediately
+        this.playerHealth = Math.max(0, this.playerHealth - 15);
 
-        //Monster deals 15 damage
-        this.playerHealth = Math.max( 0, this.playerHealth - 15);
-
-        //Plays the attack sound
-        this.sound.play("monsterHit", { volume: 0.4});
-
-        //plays only if the monster is not reacting to a hit
-        if (this.isAttacking) {
-            return;
-        }
-
-        //Plays the monster attack animation 
-        this.monster.play("monsterAttackAnim");
-
-        //Returns to its normal appearance after attacking
-        this.monster.once("animationcomplete-monsterAttackAnim", () => {
-
-            if  (!this.battleFinished) {
-                this.monster.setTexture("Monster");
-            }
-        });
-
-        //Red screen flash when the player is hurt 
-        this.cameras.main.flash(120, 180, 0, 0);
-
-        //Updates the player's health
         this.playerHealthText.setText(
-            "YOUR HP: " + this.playerHealth + "/100"
+                "YOUR HP: " + this.playerHealth + "/100"
         );
 
-        //Checks if the player loses
-        if (this.playerHealth <= 0) {
-            this.loseBattle();
-        }
+        //Plays monster attack sound
+        this.sound.play("monsterHit", { volume: 0.4 });
+
+        //Red flash to indicate damage
+        this.cameras.main.flash(150, 180, 0, 0);
+
+        //Monster remains visible
+        this.monster.setTexture("Monster");
+        this.monster.setVisible(true);
+        this.monster.setDisplaySize(240, 260);
+
+        //wait briefly before allowing another attack
+        this.time.delayedCall(500, () => {
+
+            if (this.playerHealth <= 0) {
+                this.loseBattle();
+                return;
+            }
+            //Unlock the attack button for the next turn
+            this.isAttacking = false;
+        });
     }
 
     //Player defeats the monster
@@ -380,28 +316,27 @@ class level4 extends Phaser.Scene {
         this.battleFinished = true;
         this.battleStarted = false;
 
-        //Stops monster attacks
-        this.monsterTimer.remove();
-
         //Removes battle buttons
         this.swordButton.destroy();
         this.axeButton.destroy();
         this.attackButton.destroy();
         this.weaponText.destroy();
+        
+        //Monster fades away when defeated
+        this.tweens.add({
+            targets: this.monster,
+            alpha: 0,
+            y: 350,
+            duration: 1200,
 
-        //Plays the monster defeat animation
-        this.monster.play("monsterDefeatAnim");
+            onComplete: () => {
 
-        //Waits for the defeat animation to finish
-        this.monster.once("animationcomplete-monsterDefeatAnim", () => {
+                this.monster.destroy();
 
-            //Removes the defeated monster
-            this.monster.destroy();
-
-            //Reveals the final key
-            this.showFinalKey();
+                //Displays the final key
+                this.showFinalKey();
+            }
         });
-
     }
 
     //Shows the final key after victory
@@ -474,9 +409,6 @@ class level4 extends Phaser.Scene {
     loseBattle() {
         this.battleFinished = true;
         this.battleStarted = false;
-
-        //Stops monster attacks
-        this.monsterTimer.remove();
 
         this.children.removeAll(true);
 
