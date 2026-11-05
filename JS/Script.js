@@ -1,7 +1,21 @@
-//function to start game
+//checks if the player is logged in before starting the game
 function startGame() {
+
+    //Gets the player's login status
+    let isLoggedIn = localStorage.getItem("silentHouseLoggedIN");
+
+    //Checks if the player is logged in
+    if (isLoggedIn === "true") {
+
+        //Allows the player to start the game
+        window.location.href = "GAME/game.html";
     
-    window.location.href = "GAME/game.html";
+        //Otherwise, redirect to the login page
+    } else {
+
+        window.location.href = "LoginOrRegister page.html";
+
+    }  
 } 
 
 //calls the function when start button is clicked

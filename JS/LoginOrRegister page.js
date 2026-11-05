@@ -24,11 +24,14 @@ function registerUser(event) {
     let users = JSON.parse(localStorage.getItem("silentHouseUsers")) || [];
 
     //Checks whether the username already exists
-    const existingUser = users.find(user => user.username === username);
+    const existingUser = users.find(function(user) {
+        return user.username.toLowerCase() === username.toLowerCase();
+    });
 
     //Displays a message if the username is already taken
     if(existingUser) {
       registerMessage.textContent = "This username is already taken. Please choose a diferent one.";
+      registerMessage.style.color = "#f44336";
     }
 
     //Registers the user if the username is available
@@ -43,6 +46,7 @@ function registerUser(event) {
 
         //Displays a success message
         registerMessage.textContent = "Registration successful! You can now login in.";
+        registerMessage.style.color = "#4caf50";
 
         //Clears the registration form
         registerForm.reset();
@@ -50,6 +54,37 @@ function registerUser(event) {
 
 }
 
+//Checks whether the username is available while typing
+function checkUsername() {
+
+    //Gets the username entered by the player
+    const username = document.getElementById("registerUsername").value.trim();
+
+    //Gets the registered users from local storage
+    let users = JSON.parse(localStorage.getItem("silentHouseUsers")) || [];
+
+    //Checks if the username is already exists
+    const existingUser = users.find(function(user) {
+        return user.username.toLowerCase() === username.toLowerCase();
+    });
+
+    //Checks whether the username field is empty
+    if (username === "") {
+        registerMessage.textContent = "";
+    }
+
+    //Displays a message if the username is taken
+    else if (existingUser) {
+        registerMessage.textContent = "This username is already taken.";
+        registerMessage.style.color = "#f44336";
+    }
+
+    //Displays a message if the username is available
+    else {
+        registerMessage.textContent = "Username is available!";
+        registerMessage.style.color = "#4caf50";
+    }
+}
 //Function to log in an existing account
 function loginUser(event) {
 
@@ -101,3 +136,7 @@ registerForm.addEventListener("submit", registerUser);
 
 //Calls the lofin funcion when the login form is submitted
 loginForm.addEventListener("submit", loginUser);
+
+//Checks the username availability whenever the player types
+document.getElementById("registerUsername")
+.addEventListener("input", checkUsername);

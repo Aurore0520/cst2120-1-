@@ -1,3 +1,11 @@
+//Checks whether the player is logged in
+const isLoggedIn = localStorage.getItem("silentHouseLoggedIN");
+
+//Redirects the player if not logged in
+if (isLoggedIn !== "true") {
+    window.location.replace("../LoginOrRegister page.html");
+}
+
 //Creates the first scene of the silent house
 class SilentHouse extends Phaser.Scene
 {
@@ -558,6 +566,9 @@ class SilentHouse extends Phaser.Scene
     scene: [SilentHouse, level2, level3, level4]
  };
 
- // Creates and starts the phaser game
- const game = new Phaser.Game(config);
+ //Starts the game only if the player is logged in
+ if (isLoggedIn === "true") {
+    // Creates and starts the phaser game
+    const game = new Phaser.Game(config);
+}
 
