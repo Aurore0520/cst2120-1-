@@ -1,11 +1,75 @@
 //Checks whether the player is logged in
-const isLoggedIn = localStorage.getItem("silentHouseLoggedIN");
+const currentPlayer = sessionStorage.getItem("currentPlayer");
 
 //Redirects the player if not logged in
-if (isLoggedIn !== "true") {
+if (!currentPlayer) {
     window.location.replace("../LoginOrRegister page.html");
 }
 
+//Saves the player's progress after completing a level
+function saveProgress(nextLevel, score) {
+
+    //Gets the currently logged-in player
+    const currentPlayer = sessionStorage.getItem("currentPlayer");
+
+    //Stops if no player is logged in
+    if (!currentPlayer) {
+        return;
+    }
+
+    //Creates a unique storage key for each player
+    const progressKey = "silentHouseProgress_" + currentPlayer;
+
+    //Gets any existing progress
+    const savedProgress = JSON.parse(
+        localStorage.getItem(progressKey) || "null"
+    );
+    //Prevents an earlier level from overwriting a later checkpoint
+    if (
+        savedProgress &&
+        !savedProgress.completed &&
+        savedProgress.level > nextLevel
+    ) {
+        return;
+    }
+
+    //Stores the player's progress
+    const progress = {
+        level: nextLevel,
+        score: score
+    };
+
+    //Saves the progress in localStorage
+    localStorage.setItem(progressKey, JSON.stringify(progress));
+
+    //Displays a message in the console
+    console.log("Progress saved:", progress);
+}
+
+//Loads the player's saved progress
+function loadProgress() {
+    const currentPlayer = sessionStorage.getItem("currentPlayer");
+
+    if(!currentPlayer) {
+        return null;
+    }
+
+    const progresskey = "silentHouseProgress_" + currentPlayer;
+
+    return JSON.parse(localStorage.getItem(progresskey) || "null");
+
+}
+
+//Clears the player's saved checkpoint
+function clearProgrress() {
+    const currentPlayer = sessionStorage.getItem("currentPlayer");
+
+    if (currentPlayer) {
+        localStorage.removeItem(
+            "silentHouseProgress_" + currentPlayer
+        );
+    }
+}
 //Creates the first scene of the silent house
 class SilentHouse extends Phaser.Scene
 {
@@ -213,6 +277,9 @@ class SilentHouse extends Phaser.Scene
 
         //Runs when the player clicks Continue
         continueButton.on("pointerdown", () => {
+
+            //Saves the level 2 as the next checkpoint
+            saveProgress(2, this.score);
 
             //Starts level 2 & transfers the score
             this.scene.start("level2", {
@@ -567,8 +634,38 @@ class SilentHouse extends Phaser.Scene
  };
 
  //Starts the game only if the player is logged in
- if (isLoggedIn === "true") {
+ if (currentPlayer) {
+
+    //Loads the player's saved progress
+    const savedProgress = loadProgress();
+
     // Creates and starts the phaser game
     const game = new Phaser.Game(config);
+
+    //Waits until Phaser game
+    game.events.once(Phaser.Core.Events.READY, () => {
+
+        if (savedProgress && !savedProgress.completed){
+
+            //Determines which level to resume
+            const sceneNames = {
+                2: "level2",
+                3: "level3",
+                4: "level4"
+            };
+
+            const sceneName = sceneNames[savedProgress.level];
+
+            if (sceneName) {
+
+                //stops level1 and starts the saved level
+                game.scene.stop("silentHouse");
+
+                game.scene.start(sceneName, {
+                    score: savedProgress.score
+                });
+            }
+        }
+    });
 }
 

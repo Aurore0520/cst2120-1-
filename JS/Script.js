@@ -1,45 +1,26 @@
 //checks if the player is logged in before starting the game
 function startGame() {
 
-    //Gets the player's login status
-    let isLoggedIn = localStorage.getItem("silentHouseLoggedIN");
+    //Gets the currently logged-in plyer
+    const currentPlayer = sessionStorage.getItem("currentPlayer");
 
     //Checks if the player is logged in
-    if (isLoggedIn === "true") {
+    if (currentPlayer) {
 
         //Allows the player to start the game
         window.location.href = "GAME/game.html";
-    
-        //Otherwise, redirect to the login page
     } else {
-
+        //Redirects the player to the login
         window.location.href = "LoginOrRegister page.html";
-
-    }  
+    }
 } 
-
-//calls the function when start button is clicked
-document.getElementById("startButton").onclick = startGame;
 
 //Finds the start game button
 const startButton = document.getElementById("startButton");
 
 //calls the function when the button is clicked
 if (startButton) {
-    startButton.onclick = startGame;
-}
-
-//Finds the how to play button
-const howToPlayButton = document.getElementById("howToPlayButton");
-
-//Opens the instructions page
-function howToPlay() {
-    window.location.href = "howToPlay.html";
-}
-
-//Calls the function when the button is clicked
-if (howToPlayButton) {
-    howToPlayButton.onclick = howToPlay;
+    startButton.addEventListener("click", startGame);
 }
 
 //Return to homepage button

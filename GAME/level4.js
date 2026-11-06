@@ -410,17 +410,43 @@ class level4 extends Phaser.Scene {
         //Saves the final score
         localStorage.setItem("silentHouseCurrentScore", this.score);
 
+        //Saves the completed game for the logges-in player
+        const progressKey = "silentHouseProgess_" + username;
+
+        const completedProgress ={
+            level: 4,
+            score: this.score,
+            completed: true
+        };
+
+        //Stores the completed progress
+        localStorage.setItem(
+            progressKey,
+            JSON.stringify(completedProgress)
+        );
+        console.log("Game completed! Progress saved.");
+
         //Gets the existing leaderboard
         let leaderboard = JSON.parse(
             localStorage.getItem("silentHouseLeaderboard")
         ) || [];
 
-        //Adds the player's result
-        leaderboard.push({
-            name: username,
-            score: this.score
-        });
+        const existingPlayer = leaderboard.find(
+            player => player.name === username 
+        );
 
+        if (existingPlayer) {
+            //Updates the score only if the new score is higher
+            if (this.score > existingPlayer.score) {
+                existingPlayer.score = this.score;
+            }
+        } else {
+            //Adds a new player to the leaderboard
+            leaderboard.push({
+                name: username,
+                score: this.score 
+            });
+        }
         //Saves the updated leaderboard 
         localStorage.setItem(
             "silentHouseLeaderboard",
@@ -447,6 +473,8 @@ class level4 extends Phaser.Scene {
         homeButton.on("pointerdown", () => {
             window.location.href = "../index.html";
         });
+
+        
     }
 
     //Player loses the battle

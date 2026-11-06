@@ -318,6 +318,10 @@ class level2 extends Phaser.Scene
 
             //Start level 3
             continueButton.on("pointerdown", () => {
+                
+
+                //Saves level3 as the next checkpoint
+                saveProgress(3, finalScore);
 
                 //Transfers the final score to level 3
                 this.scene.start("level3", {
@@ -358,7 +362,7 @@ class level2 extends Phaser.Scene
 
             //Restarts game from level 1
             restartButton.on("pointerdown", () => {
-
+                clearProgrress();
                 //starts level one with fresh score
                 this.scene.start("SilentHouse");
             });

@@ -7,7 +7,7 @@ class level3 extends Phaser.Scene {
     //Receives the score from level 2
     init(data) {
         this.score = data.score ?? 0;
-        this.timeRemaining = 15 * 60;
+        this.timeRemaining = 5 * 60;
         this.pin = "";
         this.correctPin = "4826";
         this.gameFinished = false;
@@ -49,7 +49,7 @@ class level3 extends Phaser.Scene {
 
         //Creates the countdown display
         this.timerText = this.add.text(
-            20, 20, "Time: 15:00",
+            20, 20, "Time: 5:00",
             {
                 fontSize: "24px",
                 color: "#ffffff",
@@ -95,7 +95,7 @@ class level3 extends Phaser.Scene {
             "You are trapped inside a mysterious bedroom.\n\n" +
             "Investigate the objects to discover four digits.\n" +
             "The clues will reveal the code in order.\n\n" +
-            "You have 15 minutes to unlock the door.\n" +
+            "You have 5 minutes to unlock the door.\n" +
             "If the time runs out, you restart from level 1.\n\n" +
             "THE CLOCK IS TICKING...",
             {
@@ -485,6 +485,10 @@ class level3 extends Phaser.Scene {
             "final score: " + this.score,
             "CONTINUE TO LEVEL 4",
             () => {
+
+                //Saves leve;4 as the next checkpoint
+                saveProgress(4, this.score);
+                
                 this.scene.start("level4", {
                     score: this.score
                 });
@@ -508,6 +512,7 @@ class level3 extends Phaser.Scene {
             "You failed to escape the bedroom.",
             "RESTART GAME",
             () => {
+                clearProgrress();
                 this.scene.start("SilentHouse");
             },
             "#7a2020"
